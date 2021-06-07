@@ -11,58 +11,56 @@
 
 ## 一、递归解法
 
-时间复杂度：O(n)，n为节点数，访问每个节点恰好一次。
+### 算法流程
 
-空间复杂度：空间复杂度：O(h)，h为树的高度。最坏情况下需要空间O(n)，平均情况为O(logn)。
+对于前序、中序和后序遍历，只需要将递归函数里的`res.append(root.val)`放在不同位置即可，然后调用这个递归函数。
+
+``` python
+def dfs(root):
+    if not root:
+        return
+    res.append(root.val)  # 前序遍历
+    dfs(root.left)
+    dfs(root.right)
+```
+
+### 复杂度分析
+
+* 时间复杂度：O(n)，n 为节点数，访问每个节点恰好一次。
+
+* 空间复杂度：O(h)，h 为树的高度。最坏情况下需要空间 O(n)，平均情况为 O(logn)。
+
+### 代码
 
 1. 前序遍历
 
 ```python
-# 递归1：二叉树遍历最易理解和实现版本
 class Solution:
     def preorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
-        return [root.val] + self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
-    
-# 递归2：通用模板，可以适应不同的题目，添加参数、增加返回条件、修改进入递归条件、自定义返回值
-class Solution:
-    def preorderTraversal(self, root: TreeNode) -> List[int]:
-        def dfs(cur):
-            if not cur:
-                return
-            # 前序递归
-            res.append(cur.val)
-            dfs(cur.left)
-            dfs(cur.right)
         res = []
-        dfs(root)
+        def dfs(root):
+            nonlocal res  # 为了让上一级的 res 能在这个函数用
+            if not root:
+                return
+            res.append(root.val)  # 先将根节点的值加入结果
+            dfs(self.left)  # 左子树
+            dfs(self.right)  # 右子树
+		dfs(root)
         return res
 ```
 
 2. 中序遍历
 
 ```python
-# 递归1：二叉树遍历最易理解和实现版本
 class Solution:
     def inorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
-        
-        return self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
-    
-# 递归2：通用模板，可以适应不同的题目，添加参数、增加返回条件、修改进入递归条件、自定义返回值
-class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]:
-        def dfs(cur):
-            if not cur:
-                return
-            # 中序递归
-            dfs(cur.left)
-            res.append(cur.val)
-            dfs(cur.right)
         res = []
-        dfs(root)
+        def dfs(root):
+            nonlocal res
+            dfs(root.left)  # 左子树
+            res.append(root.val)  # 将根节点加入结果
+            dfs(root.right)  # 右子树
+		dfs(root)
         return res
 ```
 
@@ -70,40 +68,63 @@ class Solution:
 3. 后序遍历
 
 ```python
-# 递归1：二叉树遍历最易理解和实现版本
 class Solution:
     def postorderTraversal(self, root: TreeNode) -> List[int]:
-        if not root:
-            return []
-        return self.postorderTraversal(root.left) + self.postorderTraversal(root.right) + [root.val]
-    
-# 递归2：通用模板，可以适应不同的题目，添加参数、增加返回条件、修改进入递归条件、自定义返回值
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        def dfs(cur):
-            if not cur:
-                return
-            # 后序递归
-            dfs(cur.left)
-            dfs(cur.right)
-            res.append(cur.val)
         res = []
-        dfs(root)
+        def dfs(root):
+            nonlocal res
+            dfs(root.left)  # 左子树
+            dfs(root.right)  # 右子树
+            res.append(root.val)  # 将根节点加入结果
+		dfs(root)
         return res
-```
-
-
-4. 层序遍历
-
-```python
-# 递归1：二叉树遍历最易理解和实现版本
-
-# 递归2：通用模板，可以适应不同的题目，添加参数、增加返回条件、修改进入递归条件、自定义返回值
 ```
 
 ## 二、迭代解法
 
-时间复杂度：O(n)，n为节点数，访问每个节点恰好一次。
+### 算法流程
 
-空间复杂度：O(h)，h为树的高度。取决于树的结构，最坏情况存储整棵树，即O(n)。
 
+
+### 复杂度分析
+
+* 时间复杂度：O(n)，n 为节点数，访问每个节点恰好一次。
+
+* 空间复杂度：O(h)，h 为树的高度。取决于树的结构，最坏情况存储整棵树，即O(n)。
+
+### 代码
+
+1. 前序遍历
+
+
+
+2. 中序遍历
+
+
+
+3. 后序遍历
+
+
+
+
+## 三、层序遍历
+
+```python
+class Solution:
+    def levelorderTraversal(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        res, q = [], [root]
+        while q:
+            n = len(q)
+            level = []
+            for i in range(n):
+                node = q.pop(0)  # 这里的 q 相当于一个队列
+                level.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+			res.append(level)
+		return res
+```
